@@ -1,0 +1,20 @@
+{
+  "name": "com.dot182.settingui",
+  "version": "0.1.0",
+  "displayName": "Setting UI",
+  "description": "Setting UI helpers",
+  "license": "MIT",
+  "author": {
+    "name": "dot182",
+    "url": "https://github.com/dot182"
+  },
+  "dependencies": {
+    "com.mackysoft.serializereference-extensions": "1.7.0",
+    "ayellowpaper.serialized-dictionary": "1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dot182/UnitySettingUI.git"
+  },
+  "unity": "2023.2"
+}
