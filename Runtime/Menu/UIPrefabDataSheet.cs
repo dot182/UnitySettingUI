@@ -5,7 +5,7 @@ using UnityEditor.EditorTools;
 
 namespace Uni.Settings
 {
-    [CreateAssetMenu(menuName = "SettingsUI/Prefab Data")]
+    [CreateAssetMenu(menuName = "SettingUI/Prefab Data")]
     public class UIPrefabDataSheet : ScriptableObject
     {
         public GameObject GroupTextHeaderPrefab;

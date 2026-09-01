@@ -10,6 +10,7 @@ namespace Uni.Settings
     /// You can also inherit from IApplyAllSettings to have a callback to apply everything,
     /// instead of needing to have individual logic for each setting
     /// </summary>
+    [CreateAssetMenu(menuName = "SettingUI/Setting Menu")]
     public class SettingsUIMenu : ScriptableObject
     {
         public Action OnTryCloseMenu;
