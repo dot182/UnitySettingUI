@@ -25,7 +25,7 @@ namespace Uni.Settings
         /// Instantiates UI under the parent using the provided data sheet
         /// and returns the instantiated objects.
         /// </summary>
-        public IEnumerable<GameObject> LoadUI(UIPrefabDataSheet data, Transform parent)
+        public void LoadUI(UIPrefabDataSheet data, Transform parent, Action<GameObject> callback = null)
         {
             foreach (SettingsGroup group in SettingGroups)
             {
@@ -34,14 +34,14 @@ namespace Uni.Settings
                     GameObject header = Instantiate(data.GroupTextHeaderPrefab);
                     header.GetComponentInChildren<TextMeshProUGUI>().text = group.Header;
                     header.transform.SetParent(parent, false);
-                    yield return header;
+                    callback?.Invoke(header);
                 }
 
                 foreach (SettingUIConfig config in group.Settings)
                 {
                     GameObject loaded = config.Load(data);
                     loaded.transform.SetParent(parent, false);
-                    yield return loaded;
+                    callback?.Invoke(loaded);
                 }
             }
         }
