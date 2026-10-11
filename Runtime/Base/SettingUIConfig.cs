@@ -17,6 +17,17 @@ namespace Uni.Settings
         public GameObject Instantiated { get; protected set; }
         public TextMeshProUGUI Label { get; protected set; }
 
+        public bool Enabled
+        {
+            get => enabled;
+            set
+            {
+                enabled = value;
+                if (Instantiated)
+                    Instantiated.SetActive(enabled);
+            }
+        }
+        private bool enabled = true;
         private UIPrefabDataSheet prefabDataSheet;
 
         public virtual GameObject Load(UIPrefabDataSheet prefabDataSheet)
@@ -26,52 +37,62 @@ namespace Uni.Settings
             UIPrefabData data = prefabDataSheet.MainPrefabDatas[PrefabKey];
             Instantiated = GameObject.Instantiate(data.Prefab);
 
-            Label = Instantiated.transform.Find(data.LabelTransformName)?.GetComponent<TextMeshProUGUI>();
+            Label = Instantiated
+                .transform.Find(data.LabelTransformName)
+                ?.GetComponent<TextMeshProUGUI>();
             Label.text = SettingName;
 
             LoadUI(Instantiated, prefabDataSheet);
+            Instantiated.SetActive(Enabled);
             return Instantiated;
         }
-        public virtual void RefreshUI()
+
+        public virtual void Refresh()
         {
             Label.text = SettingName;
             LoadUI(Instantiated, prefabDataSheet);
         }
+
         public abstract void LoadUI(GameObject instantiated, UIPrefabDataSheet prefabData);
     }
+
     /// <summary>
     /// Controls setting UI
-    /// If you are deriving from this: We will call UpdateShownValue() for you after load ui, so don't worry. 
     /// </summary>
     [Serializable]
     public abstract class SettingUIConfig<T> : SettingUIConfig, ISaveable
     {
+        public T Value => Config.Value;
+
         [field: SerializeField, SerializeReference, SubclassSelector]
         public SettingConfig<T> Config { get; private set; }
-        
+
         public void Init(ISaveMethod saveMethod)
         {
-            Config.OnValueChanged += UpdateShownValue;
-            Config.Init(this, saveMethod);
+            Config.OnValueChanged += _ => UpdateShownValue();
+            Config.Init(saveMethod);
         }
+
         public override GameObject Load(UIPrefabDataSheet prefabDataSheet)
         {
             GameObject gameObject = base.Load(prefabDataSheet);
-            UpdateShownValue();
             return gameObject;
         }
+
+        public void AddListener(Action<T> listener) => Config.OnValueChanged += listener;
+
         /// <summary>
         /// Refreshes value and ui
         /// </summary>
-        public override void RefreshUI()
+        public override void Refresh()
         {
             Config.RefreshValue();
-            base.RefreshUI();
+            if (Instantiated)
+            {
+                base.Refresh();
+            }
         }
-        public void Save()
-        {
-            Config.SaveCurrentValue();
-        }
+
         public void UpdateShownValue()
         {
             if (Instantiated)
@@ -79,6 +100,7 @@ namespace Uni.Settings
                 UpdateShownValue(Config.Value);
             }
         }
+
         public abstract void UpdateShownValue(T value);
     }
 }
