@@ -13,6 +13,7 @@ namespace Uni.Settings
         {
             Toggle = instantiated.GetComponentInChildren<Toggle>();
             Toggle.onValueChanged.AddListener(OnToggleChange);
+            UpdateShownValue();
         }
         public override void UpdateShownValue(bool value)
             => Toggle.SetIsOnWithoutNotify(value);

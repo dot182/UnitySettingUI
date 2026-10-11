@@ -13,14 +13,14 @@ namespace Uni.Settings
         public override string PrefabKey => "Button";
 
         public Button Button { get; protected set; }
-        public virtual string ButtonText => buttonText;
-        [SerializeField] private string buttonText;
+        public string ButtonText;
         [SerializeReference, SubclassSelector] public IOnButtonSettingClick OnButtonSettingClick;
 
         public override void LoadUI(GameObject instantiated, UIPrefabDataSheet prefabData)
         {
             Button = instantiated.GetComponentInChildren<Button>();
-            Button.onClick.AddListener(OnButtonSettingClick.OnClick);
+            if (OnButtonSettingClick != null)
+                Button.onClick.AddListener(OnButtonSettingClick.OnClick);
         }
     }
 

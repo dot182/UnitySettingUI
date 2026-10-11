@@ -25,6 +25,7 @@ namespace Uni.Settings
             }
 
             Slider.onValueChanged.AddListener(OnSliderChange);
+            UpdateShownValue();
         }
         private void OnSliderChange(float value)
             => Config.Value = (int)value;

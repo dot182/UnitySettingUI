@@ -6,8 +6,24 @@ namespace Uni.Settings
     [Serializable]
     public class IntConfig : SettingConfig<int>
     {
-        public virtual int Max => max;
-        public virtual int Min => min;
+        public int Max
+        {
+            get => max;
+            set
+            {
+                max = value;
+                this.Value = Math.Max(Value, max);
+            }
+        }
+        public int Min
+        {
+            get => min;
+            set
+            {
+                min = value;
+                this.Value = Math.Min(Value, min);
+            }
+        }
 
         [SerializeField] private int max;
         [SerializeField] private int min;
